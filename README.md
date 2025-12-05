@@ -20,11 +20,6 @@ JarAsService 是一个将 JAR 文件作为 Windows 托盘应用程序运行的�
    git submodule update --init --recursive
    ```
 4. 在CLion中构建项目：选择`Build -> Build Project`。
-5. 如果你想安装生成的可执行文件，可以在CLion的终端中运行以下命令：
-   ```sh
-   cmake --build . --target install --config Release
-   ```
-   请确保在运行此命令之前已经设置了`INSTALL`选项为`ON`，可以通过在CLion的`CMake`设置中添加`-DINSTALL=ON`来实现。
 
 ## 依赖项
 
