@@ -1,6 +1,7 @@
 //
 // Created by MuXin on 2025/12/5.
 //
+// ReSharper disable CppDeprecatedEntity
 module;
 #include <Windows.h>
 
@@ -34,16 +35,16 @@ auto jar_service(const HINSTANCE hInstance, const std::filesystem::path& jar_fil
 
 
     auto length = std::size_t{};
-    wchar_t java[MAX_PATH] = {};
-    _wgetenv_s(&length, java, MAX_PATH, L"JAVA_HOME");
-    std::ranges::copy(L"\\bin\\java.exe", java + length - 1);
-    const auto arg = f::wstring{L"-jar "} + jar_file.c_str();
-    auto process = f::win32::process{
-        java, arg
-    };
+    wchar_t cmd[MAX_PATH] = {};
+    _wgetenv_s(&length, cmd, MAX_PATH, L"JAVA_HOME");
+    std::ranges::copy(L"\\bin\\java.exe -jar ", cmd + length - 1);
+    std::wcscpy(cmd + std::wcslen(cmd), jar_file.c_str());
+    auto process = f::win32::process{cmd, jar_file.c_str()};
+    auto stop = std::atomic_bool{false};
 
-    auto thread = std::jthread{[&process] {
+    auto thread = std::jthread{[&] {
         process.join();
+        stop = true;
     }};
 
     window.on(WM_USER, [&process](const f::win32::window* wnd, WPARAM, const LPARAM lp) -> LRESULT {
@@ -59,7 +60,11 @@ auto jar_service(const HINSTANCE hInstance, const std::filesystem::path& jar_fil
         return S_OK;
     });
 
-    while (window.consume_message()) {}
+    while (window.try_consume_message())
+        if (stop)
+            window.destroy();
+
+
 }
 
 }
