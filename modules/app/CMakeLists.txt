@@ -7,7 +7,5 @@ target_sources(JarAsService PRIVATE
 # 添加对f和f.win32模块的依赖
 target_link_libraries(JarAsService PRIVATE f f.win32)
 
-if (INSTALL)
-    install(TARGETS JarAsService
-        RUNTIME DESTINATION bin)
-endif ()
+install(TARGETS JarAsService
+    RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/../dist/)
