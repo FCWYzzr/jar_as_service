@@ -8,4 +8,4 @@ target_sources(JarAsService PRIVATE
 target_link_libraries(JarAsService PRIVATE f f.win32)
 
 install(TARGETS JarAsService
-    RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/../dist/)
+    RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/dist/)
